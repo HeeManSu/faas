@@ -5,6 +5,7 @@
 	"main": "dist/index.js",
 	"scripts": {
 		"test": "npm run --silent build && mocha dist/test",
+		"coverage": "nyc npm run test",
 		"unit": "npm run --silent test -- --ignore **/integration**",
 		"prepublishOnly": "npm run --silent build",
 		"build": "npm run --silent lint && tsc",
