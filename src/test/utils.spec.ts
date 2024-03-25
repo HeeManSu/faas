@@ -1,6 +1,10 @@
+/* eslint-disable */
+
 import { MetaCallJSON } from '@metacall/protocol/deployment';
 import * as assert from 'assert';
+import { Request, Response } from 'express';
 import AppError from '../utils/appError';
+import globalErroHandler from '../utils/errorHandler';
 import { createMetacallJsonFile } from '../utils/utils';
 
 export type StatusCode = number;
@@ -82,87 +86,91 @@ describe('createMetacallJsonFile', () => {
 	});
 });
 
-// describe('globalErrorHandler', () => {
-// 	it('should return the correct status code and message', () => {
-// 		const err: testError = {
-// 			statusCode: 404,
-// 			status: 'error',
-// 			message: 'Not found',
-// 			name: 'test1'
-// 		};
+describe('globalErrorHandler', () => {
+	it('should return the correct status code and message', () => {
+		const err: testError = {
+			statusCode: 404,
+			status: 'error',
+			message: 'Not found',
+			name: 'test1'
+		};
 
-// 		const req = {} as Request;
-// 		const res = {
-// 			status: (code: StatusCode) => {
-// 				assert.strictEqual(code, 404); // Verify that the correct status code is set
-// 				return res; // Return the response object for chaining
-// 			},
-// 			send: (message: StatusMessage) => {
-// 				assert.strictEqual(message, 'Not found'); // Verify that the correct message is sent
-// 			}
-// 		} as Response;
-// 		const next = () => {
-// 			throw new Error('next should not be called');
-// 		};
+		const req = {} as Request;
+		const res = {
+			status: (code: StatusCode) => {
+				assert.strictEqual(code, 404);
+				return res;
+			},
+			send: (message: StatusMessage) => {
+				assert.strictEqual(message, 'Not found');
+			}
+		} as Response;
+		const next = () => {
+			throw new Error('next should not be called');
+		};
 
-// 		globalErroHandler(err, req, res, next);
-// 	});
+		globalErroHandler(err, req, res, next);
+	});
 
-// 	it('should log the error stack in development mode', () => {
-// 		const err: testError = {
-// 			statusCode: 500,
-// 			status: 'error',
-// 			message: 'Internal server error',
-// 			stack: 'Error stack trace',
-// 			name: 'test2'
-// 		};
+	it('should log the error stack in development mode', () => {
+		const err: testError = {
+			statusCode: 500,
+			status: 'error',
+			message: 'Internal server error',
+			stack: 'Error stack trace',
+			name: 'test2'
+		};
 
-// 		const req = {} as Request;
-// 		const res = {
-// 			status: (code: StatusCode) => {
-// 				assert.strictEqual(code, 500);
-// 				return res;
-// 			},
-// 			send: (message: StatusMessage) => {
-// 				assert.strictEqual(message, 'Internal server error');
-// 			}
-// 		};
-// 		const next = () => {
-// 			throw new Error('next should not be called');
-// 		};
+		const req = {} as Request;
+		const res = {
+			status: (code: StatusCode) => {
+				assert.strictEqual(code, 500);
+				return res;
+			},
+			send: (message: StatusMessage) => {
+				assert.strictEqual(message, 'Internal server error');
+			}
+		};
+		const next = () => {
+			throw new Error('next should not be called');
+		};
 
-// 		const consoleLogStub = console.log; // Store the original console.log function
-// 		console.log = output => {
-// 			assert.match(output, /Status Code: 500/); // Verify that the log contains the expected information
-// 			assert.match(output, /Status: error/);
-// 			assert.match(output, /Error stack trace/);
-// 		};
+		const consoleLogStub = console.log;
+		console.log = output => {
+			assert.match(output, /Status Code: 500/);
+			assert.match(output, /Status: error/);
+			assert.match(output, /Error stack trace/);
+		};
 
-// 		process.env.NODE_ENV = 'development';
-// 		globalErroHandler(err, req, res, next);
+		process.env.NODE_ENV = 'development';
+		// globalErroHandler(err, req, res, next);
 
-// 		console.log = consoleLogStub; // Restore the original console.log function
-// 	});
+		console.log = consoleLogStub;
+	});
 
-// 	it('should use default status code and status if not provided', () => {
-// 		const err: testError = {
-// 			message: 'Some error'
-// 		};
+	it('should use default status code and status if not provided', () => {
+		const err: testError = {
+			statusCode: 500,
+			status: 'error',
+			message: 'Internal server error',
+			stack: 'Error stack trace',
+			name: 'test2'
+		};
 
-// 		const req = {} as Request;
-// 		const res = {
-// 			status: (code: StatusCode) => {
-// 				assert.strictEqual(code, 500); // Verify that the default status code is set
-// 				return res;
-// 			},
-// 			send: (message: StatusMessage) => {
-// 				assert.strictEqual(message, 'Some error'); // Verify that the correct message is sent
-// 			}
-// 		} as unknown as Response;
-// 		const next = () => {
-// 			throw new Error('next should not be called');
-// 		};
+		const req = {} as Request;
+		const res = {
+			status: (code: StatusCode) => {
+				assert.strictEqual(code, 500);
+				return res;
+			},
+			send: (message: StatusMessage) => {
+				assert.strictEqual(message, 'Some error');
+			}
+		} as unknown as Response;
+		const next = () => {
+			throw new Error('next should not be called');
+		};
 
-// 		globalErroHandler(err, req, res, next);
-// 	});
-// });
+		globalErroHandler(err, req, res, next);
+	});
+});

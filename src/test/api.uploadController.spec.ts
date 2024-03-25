@@ -1,6 +1,5 @@
 import busboy from 'busboy';
 import { Request, Response } from 'express';
-// import { describe } from 'mocha';
 
 import * as fs from 'fs';
 import * as sinon from 'sinon';
@@ -41,7 +40,7 @@ describe('Upload Controller Tests', () => {
 					filename: 'sample.zip'
 				});
 			}
-			return bb; // Ensure the stub returns the busboy instance
+			return bb;
 		});
 	});
 });
