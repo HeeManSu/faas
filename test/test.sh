@@ -30,7 +30,7 @@ BASE_URL="http://localhost:9000"
 # Function to check readiness
 function check_readiness() {
 	local status_code
-	status_code=$(curl -s -o /dev/null -w "%{http_code}" $BASE_URL/readiness)
+	status_code=$(curl -s -o /dev/null -w "%{http_code}" $BASE_URL/api/readiness)
 	echo "$status_code"
 }
 
